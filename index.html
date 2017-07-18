@@ -30,8 +30,10 @@
 
   <script>
     backboneReady(() => {
+      console.log('runs');
       new AppView();
     });
+    backboneReady();
   </script>
 
 </body>
