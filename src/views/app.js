@@ -3,15 +3,17 @@ var AppView = Backbone.View.extend({
   el: '#app',
 
   initialize: function() {
-    this.videos = new Videos(window.exampleVideoData);
-    //this.videoPlayer = new VideoPlayerView();
-    //this.videoListView = new VideoListView();
-    //this.videoListEntry = new VideoListEntry();
-
+    this.videos = new Videos();
+    this.listenTo(this.videos, 'sync', this.selectFirst);
     this.render();
-    //this.videoPlayer.render();
-    //this.videoListView.render();
-    //this.videoListEntry.render();
+    this.videos.search('rick astley');
+
+  },
+
+  selectFirst: function() {
+    if (this.videos.length > 0) {
+      this.videos.at(0).select();
+    }
   },
 
 
@@ -26,6 +28,11 @@ var AppView = Backbone.View.extend({
     new VideoPlayerView({
       el: this.$('.player'),
       model: this.videos.at(0),
+      collection: this.videos,
+    }).render();
+
+    new SearchView({
+      el: this.$('.search'),
       collection: this.videos,
     }).render();
     return this;
